@@ -1,0 +1,24 @@
+from fastapi import FastAPI
+from typing import Optional
+
+app = FastAPI()
+
+@app.get("/")
+async def read_root():
+    return {"mensagem": "Olá, mundo!"}
+
+@app.get("/itens/{item_id}")
+async def read_item(item_id: int, q: Optional[str] = None):
+    return {"item_id": item_id, "q": q} 
+
+
+    # Crie uma rota que retorne a soma de dois números passados 
+    # por caminho (path de url)
+
+@app.get("/soma/{num1}/{num2}")
+async def soma(num1: int, num2: int):
+    return {"soma": num1 + num2}
+
+@app.get("/adicao/{a}/{b}")
+async def adicao(a: int, b: int):
+    return {"soma": a + b}
