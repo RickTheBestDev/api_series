@@ -5,7 +5,7 @@ from os import getenv
 from dotenv import load_dotenv
  
 BASE_DIR = Path(__file__).resolve().parent.parent
-load_dotenv()
+load_dotenv(BASE_DIR / ".env")
  
 # Inicialização (criação do SCHEMA no banco de dados)
 SERVER_URL = f"mysql+pymysql://{getenv('DB_USER')}:{getenv('DB_PSWD')}@{getenv('DB_HOST')}"
