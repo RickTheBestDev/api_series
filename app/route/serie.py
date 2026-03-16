@@ -28,8 +28,19 @@ async def deletar_serie(id: int, dados: SerieSchema, db: Session = Depends(get_d
     db.delete(id)
     db.commit()
  
-@serie.put('/update/{id}')
-async def atualizar_serie(id: int, titulo: str, descricao: str, ano_lancamento: int):
-    result = {'titulo': titulo, 'descrição': descricao, "Ano Lançamento": ano_lancamento}
-    
-    return result
+@serie.put("/{id}")
+async def atualizar_serie(id: int, dados: SerieSchema = Depends(), db: Session = Depends(get_db)):
+    serie_encontrada = db.query(SerieModel).filter(SerieModel.id == id).first()
+
+    if not serie_encontrada:
+        return {"erro": "Série não encontrada"}
+
+    # Atualiza automaticamente só o que você preencheu
+    dados_atualizados = dados.model_dump(exclude_unset=True)
+
+    for chave, valor in dados_atualizados.items():
+        setattr(serie_encontrada, chave, valor)
+
+    db.commit()
+    db.refresh(serie_encontrada)
+    return serie_encontrada
